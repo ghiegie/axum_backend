@@ -1,0 +1,51 @@
+sales order -> kung make it simple, string type lang sya
+customer -> custom form for customer, then sa mismong SO maker, may option ng new (buksan ung form) at choose from old
+prod order no. -> kung make it simple, striing type
+item code -> custom form for making item, then sa mismong SO maker, choose from item, didisplay dpat both item name and item code
+item description -> kung simple, str type
+quantity -> numeric up down
+production completion date -> kung simple, str type
+delivery commitment date -> kung simple, str type
+sales request sched -> kung simple, str type
+color coat -> may choices
+
+DONE sa sales order db
+SO name, str // non repeating
+customer id, str HIWALAY NA DB
+prod order no., str 
+item code, str HIWALAY NA DB
+item desc, str
+qty, int
+prod comp date, str
+del commit date, str
+sales req sched, str
+color coat id, int HIWALAY NA DB
+
+sa gui ng sales order
+enter name
+sa customer may dropdown at amy katabi na new customer
+// may fetch customer dito
+sa baba ng customer may blank space na magpapakita ng customer details
+enter prod order no.
+dropdown item with matching item code
+// may fetch item dito
+enter item desc
+numeric up down for quantity
+enter prod com date
+enter del comm date
+enter sales req sched
+dropdown color coat
+// may fetch item
+
+DONE sa customer DB
+customer id, str // non repeating
+name, str // non repeating
+address, str
+contact person, str
+tin, str //non repeating //kung pde numerical only
+tel no, str // kung pde numerical only
+store name, str
+delv addr, str
+email, str
+
+
