@@ -22,20 +22,50 @@ sales req sched, str
 color coat id, int HIWALAY NA DB
 
 sa gui ng sales order
-enter name
-sa customer may dropdown at amy katabi na new customer
-// may fetch customer dito
-sa baba ng customer may blank space na magpapakita ng customer details
-enter prod order no.
-dropdown item with matching item code
-// may fetch item dito
-enter item desc
-numeric up down for quantity
-enter prod com date
-enter del comm date
-enter sales req sched
-dropdown color coat
-// may fetch item
+1
+{
+    	enter name 
+}
+4 
+{
+	sa customer may dropdown at amy katabi na new customer
+	// may fetch customer dito
+	sa baba ng customer may blank space na magpapakita ng customer details
+}
+1
+{
+	enter prod order no.
+}
+1
+{
+	dropdown item with matching item code
+	// may fetch item dito
+}
+3
+{
+	enter item desc
+}
+1
+{
+	numeric up down for quantity
+}
+3
+{
+	enter prod com date
+}
+{
+	enter del comm date
+}
+{
+	enter sales req sched
+}
+1
+{
+	dropdown color coat
+	// may fetch item
+}
+
+
 
 DONE sa customer DB
 customer id, str // non repeating
@@ -48,4 +78,5 @@ store name, str
 delv addr, str
 email, str
 
-
+looping sana for get response:
+adjust sql query by intervals then execute
