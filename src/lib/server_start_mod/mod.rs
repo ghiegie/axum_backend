@@ -1,11 +1,11 @@
-use axum::Router;
+use axum::{Router, middleware};
 use odbc_api::{
     sys::{AttrConnectionPooling, AttrCpMatch},
     Environment,
 };
 use std::sync::Arc;
 
-use crate::routers_mod::sales_order_mod::sales_order_router;
+use crate::routers_mod::{sales_order_mod::sales_order_router, main_response_mapper};
 
 pub fn give_state(con_str: String) -> (String, Arc<Environment>) {
     (
@@ -26,7 +26,10 @@ pub fn give_state(con_str: String) -> (String, Arc<Environment>) {
 }
 
 pub fn create_main_router() -> Router {
-    Router::new().nest("/sales_order", sales_order_router()).with_state(give_state("Driver={ODBC Driver 17 for SQL Server};Server=DESKTOP-DCDEB6P\\MSSQLSERVER01;Database=TestDatabase;Trusted_Connection=yes;".to_owned()))
+    Router::new()
+        .nest("/sales_order", sales_order_router())
+        .layer(middleware::map_response(main_response_mapper))
+        .with_state(give_state("Driver={ODBC Driver 17 for SQL Server};Server=DESKTOP-DCDEB6P\\MSSQLSERVER01;Database=TestDatabase;Trusted_Connection=yes;".to_owned()))
 }
 
 pub async fn start_server(ip_addr: &str, router: Router) {

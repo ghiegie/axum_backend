@@ -3,9 +3,11 @@ use odbc_api::{
     buffers::{BufferDesc, ColumnarAnyBuffer},
     ConnectionOptions, Cursor, Environment,
 };
+use serde_json::{json, Value};
 use std::sync::Arc;
 
 use super::structs::CustomerData;
+use crate::error_mod::*;
 
 pub async fn get_customers(
     State((con_str, env)): State<(String, Arc<Environment>)>,
@@ -35,7 +37,8 @@ pub async fn get_customers(
             .bind_buffer(&mut buff)
             .expect("ERROR: FAILED TO CREATE BUFFER-CURSOR");
 
-        if let Some(fetched_data) = buff_cursor.fetch().expect("ERROR: FAILED TO FETCH") { // if cursor contains data
+        if let Some(fetched_data) = buff_cursor.fetch().expect("ERROR: FAILED TO FETCH") {
+            // if cursor contains data
             println!("cursor has data");
             let mut looping_vec = Vec::new();
             for i in 0..fetched_data.num_cols() {
@@ -53,7 +56,8 @@ pub async fn get_customers(
             }
 
             println!("{:?}", looping_vec);
-        } else { // if cursor contains no data
+        } else {
+            // if cursor contains no data
             break;
         }
 
@@ -63,4 +67,17 @@ pub async fn get_customers(
     // (StatusCode::NO_CONTENT, Json(Vec::new()))
     (StatusCode::OK, Json(Vec::new()))
     // "wait".to_owned()
+}
+
+pub async fn test_get() -> MyResult<Json<Value>> {
+    if 1 + 1 == 3 {
+        return Err(MyError::LoginFail);
+    }
+
+    println!("from /tasks/get/test_get");
+
+    Ok(Json(json!({
+        "test": 123,
+        "another": "one"
+    })))
 }
