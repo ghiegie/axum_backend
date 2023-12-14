@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct CustomerData {
+pub struct Customer {
     cust_id: String,
     name: String,
     addr: String,

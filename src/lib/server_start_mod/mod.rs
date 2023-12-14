@@ -1,35 +1,41 @@
-use axum::{Router, middleware};
-use odbc_api::{
-    sys::{AttrConnectionPooling, AttrCpMatch},
-    Environment,
-};
+use axum::{middleware, Router, extract::FromRef};
+use odbc_api::{sys::{AttrConnectionPooling, AttrCpMatch}, Environment};
 use std::sync::Arc;
 
-use crate::routers_mod::{sales_order_mod::sales_order_router, main_response_mapper};
+use crate::{
+    model_controller_mod::ModelController,
+    routers_mod::{main_response_mapper, sales_order_mod::sales_order_router},
+};
 
-pub fn give_state(con_str: String) -> (String, Arc<Environment>) {
-    (
-        con_str,
+#[derive(Clone, FromRef)]
+struct Appstate {
+    mc: ModelController,
+}
+
+impl Appstate {
+    fn new(mc: ModelController) -> Self {
+        Self { mc }
+    }
+}
+
+pub async fn create_main_router(mc: ModelController) -> Router {
+    let mc = ModelController::new(
+        "Driver={ODBC Driver 17 for SQL Server};Server=DESKTOP-DCDEB6P\\MSSQLSERVER01;Database=TestDatabase;Trusted_Connection=yes;".to_owned(), 
         Arc::new({
             unsafe {
-                Environment::set_connection_pooling(AttrConnectionPooling::DriverAware)
-                    .expect("UNSAFE CODE ERROR ");
+                Environment::set_connection_pooling(AttrConnectionPooling::DriverAware).unwrap();
             }
 
             let mut env = Environment::new().unwrap();
-
-            env.set_connection_pooling_matching(AttrCpMatch::Strict)
-                .expect("CREATION OF DB POOL FAILED");
+            env.set_connection_pooling_matching(AttrCpMatch::Strict).unwrap();
             env
-        }),
-    )
-}
+        })
+    ).await.unwrap();
 
-pub fn create_main_router() -> Router {
     Router::new()
         .nest("/sales_order", sales_order_router())
         .layer(middleware::map_response(main_response_mapper))
-        .with_state(give_state("Driver={ODBC Driver 17 for SQL Server};Server=DESKTOP-DCDEB6P\\MSSQLSERVER01;Database=TestDatabase;Trusted_Connection=yes;".to_owned()))
+        .with_state(mc)
 }
 
 pub async fn start_server(ip_addr: &str, router: Router) {

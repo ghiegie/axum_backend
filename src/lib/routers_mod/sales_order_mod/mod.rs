@@ -7,6 +7,6 @@ use self::get_handlers_mod::get_router;
 pub mod get_handlers_mod;
 pub mod post_handlers_mod;
 
-pub fn sales_order_router() -> Router<(String, Arc<Environment>)> {
+pub fn sales_order_router() -> Router {
     Router::new().nest("/get", get_router())
 }

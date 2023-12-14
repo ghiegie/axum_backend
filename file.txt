@@ -80,3 +80,7 @@ email, str
 
 looping sana for get response:
 adjust sql query by intervals then execute
+
+model ung models of data to be passed, 
+
+needi i-implement sa bawat handler to mc ung logic for crud 
